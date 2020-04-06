@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import sortBy from "sort-by";
 import Book from "./books";
 
@@ -17,8 +17,8 @@ class Search extends Component {
 				query: event.target.value,
 			},
 			this.onSearch
-		);
-	};
+		)
+	}
 
 	onSearch() {
 		const { query } = this.state;
@@ -28,15 +28,14 @@ class Search extends Component {
 			return this.setState({ booksInDB: [] });
 		}
 
-		if (query) {
-			BooksAPI.search(query.trim()).then((response) => {
+		if (query.trim()) {
+			BooksAPI.search(query).then((response) => {
 				if (response.error) {
-					this.setState({ booksInDB: [] });
+					this.setState({ booksInDB: [] })
 				} else {
-					!response.error &&
 						response.forEach((object) => {
-							const visible = books.find(({ id }) => id === books.id);
-							books.shelf = visible ? visible.shelf : "none";
+							const visible = books.find(({ id }) => id === object.id);
+							object.shelf = visible ? visible.shelf : 'none';
 						});
 					if (response.length !== 0) {
 						response.sort(sortBy("title"));
@@ -81,9 +80,9 @@ class Search extends Component {
 	}
 }
 
-// Search.PropTypes = {
-// 	books: PropTypes.array.isRequired,
-// 	updateBookCategory: PropTypes.func.isRequired
-// }
+Search.PropTypes = {
+	books: PropTypes.array.isRequired,
+	updateBookCategory: PropTypes.func.isRequired
+}
 
 export default Search;
